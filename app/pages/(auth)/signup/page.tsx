@@ -42,7 +42,12 @@ const SignUp = () => {
         <div className="mb-2">
           <Controller
             control={control}
-            rules={{ required: true }}
+            rules={{
+              required: {
+                value: true,
+                message: "Name is required",
+              },
+            }}
             name="fname"
             render={({ field: { onChange, onBlur, value }, formState }) => (
               <CustomInput
@@ -58,7 +63,7 @@ const SignUp = () => {
               />
             )}
           />
-          <p>{errors.fname && errors.fname.message}</p>
+          <p style={{ color: "red" }}>{errors.fname && errors.fname.message}</p>
         </div>
         <div className="mb-2">
           <Controller
@@ -93,7 +98,9 @@ const SignUp = () => {
               />
             )}
           />
-          <p>{errors.password && errors.password.message}</p>
+          <p style={{ color: "red" }}>
+            {errors.password && errors.password.message}
+          </p>
         </div>
         <div className="mb-2">
           <Controller
@@ -123,7 +130,9 @@ const SignUp = () => {
               />
             )}
           />
-          {errors.email && <p>{errors.email.message}</p>}
+          {errors.email && (
+            <p style={{ color: "red" }}>{errors.email.message}</p>
+          )}
         </div>
 
         <Button

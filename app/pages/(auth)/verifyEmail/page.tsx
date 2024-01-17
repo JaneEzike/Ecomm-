@@ -1,9 +1,11 @@
+"use client";
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useVerifyEmail } from "@/services/api/auth/authApi";
+// import { useVerifyEmail } from "@/services/api/auth/authApi";
 import { CustomInput } from "@/components/CustomInput";
+import Button from "@/components/buttons";
 
 const EmailVerificationPage = () => {
   const router = useRouter();
@@ -19,17 +21,17 @@ const EmailVerificationPage = () => {
     },
   });
 
-  const verifyEmailMutation = useVerifyEmail();
+  // const verifyEmailMutation = useVerifyEmail();
   const onSubmit = async (data: any) => {
     try {
-      const response = await verifyEmailMutation.mutateAsync();
-      verifyEmailMutation.isSuccess &&
-        toast.success("Email verified successfuly!");
-      router.push("/login");
-      console.log(response);
+      // const response = await verifyEmailMutation.mutateAsync();
+      // verifyEmailMutation.isSuccess &&
+      //   toast.success("Email verified successfuly!");
+      // router.push("/login");
+      // console.log(response);
     } catch (error) {
-      verifyEmailMutation.isError &&
-        toast.error(verifyEmailMutation.error.message);
+      // verifyEmailMutation.isError &&
+      //   toast.error(verifyEmailMutation.error.message);
     }
   };
   useEffect(() => {
@@ -39,10 +41,17 @@ const EmailVerificationPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful]);
   return (
-    <section className="bg-ct-blue-600 min-h-screen grid place-items-center">
+    <section className="w-screen h-screen bg-blue-400 flex items-center justify-center">
       <ToastContainer />
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <div>
+
+      <form
+        action=""
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-white p-4"
+      >
+        {" "}
+        <h1>VERIFY EMAIL ADDRESS</h1>
+        <div className="my-3">
           <Controller
             control={control}
             name="email"
@@ -72,6 +81,15 @@ const EmailVerificationPage = () => {
           />
           {errors.email && <p>{errors.email.message}</p>}
         </div>
+        <Button
+          size="md"
+          variant="primary"
+          loadingText="loading"
+          text="register"
+          disabled={false}
+          fullWidth={true}
+          loading={false}
+        />
       </form>
     </section>
   );

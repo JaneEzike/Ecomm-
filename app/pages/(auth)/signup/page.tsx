@@ -1,10 +1,13 @@
 "use client";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import Button from "@/components/buttons";
 import { CustomInput } from "@/components/CustomInput";
 
-// import { useSignUp } from "@/services/api/auth/authApi";
+import { signUpUserFn } from "@/services/api/auth/authApi";
+import { IUser } from "@/app/types/general";
 
 interface FormData {
   fname: string;
@@ -12,7 +15,7 @@ interface FormData {
   email: string;
 }
 const SignUp = () => {
-  // const signUpMutation = useSignUp();
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -24,20 +27,30 @@ const SignUp = () => {
       email: "",
     },
   });
-  const onSubmit: SubmitHandler<FormData> = async (data: any) => {
+  const useSignUpMutation = useMutation({
+    mutationFn: (userData: IUser) => signUpUserFn(userData),
+  });
+
+  const onSubmit = async (values: any) => {
     try {
-      // const response = await signUpMutation.mutateAsync(data);
-      // toast.success("Signup successful!");
-      // Handle successful signup response (if needed)
-      // console.log(response);
+      const response = await useSignUpMutation.mutateAsync(values);
+      useSignUpMutation.isSuccess &&
+        setTimeout(() => {
+          toast.success("Signup successful!");
+          router.push("pages/authMessage");
+        }, 2000);
+      console.log(response);
     } catch (error) {
-      // Handle signup error
-      // console.error(error);
-      // toast.error("Signup successful!");
+      useSignUpMutation.isError &&
+        setTimeout(() => {
+          toast.error(useSignUpMutation.error.message);
+        }, 2000);
     }
   };
+
   return (
     <div className="w-screen h-screen bg-blue-400 flex items-center justify-center  ">
+      <ToastContainer />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="min-h-[300px] w-[400px] bg-white flex items-center flex-col justify-center gap-3 p-4 "
@@ -142,7 +155,7 @@ const SignUp = () => {
           size="md"
           variant="primary"
           loadingText="loading"
-          text="register"
+          text={useSignUpMutation.isPending ? "Signing up..." : "Sign Up"}
           disabled={false}
           fullWidth={true}
           loading={false}

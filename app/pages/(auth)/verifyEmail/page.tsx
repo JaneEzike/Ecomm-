@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
-// import { useVerifyEmail } from "@/services/api/auth/authApi";
+import { useMutation } from "@tanstack/react-query";
+import { verifyEmailFn } from "@/services/api/auth/authApi";
 import { CustomInput } from "@/components/CustomInput";
 import Button from "@/components/buttons";
 
@@ -21,17 +22,24 @@ const EmailVerificationPage = () => {
     },
   });
 
-  // const verifyEmailMutation = useVerifyEmail();
-  const onSubmit = async (data: any) => {
+  const useVerifyemailMutation = useMutation({
+    mutationFn: (userData: any) => verifyEmailFn(userData),
+  });
+
+  const onSubmit = async (values: any) => {
     try {
-      // const response = await verifyEmailMutation.mutateAsync();
-      // verifyEmailMutation.isSuccess &&
-      //   toast.success("Email verified successfuly!");
-      // router.push("/login");
-      // console.log(response);
+      const response = await useVerifyemailMutation.mutateAsync(values);
+      useVerifyemailMutation.isSuccess &&
+        setTimeout(() => {
+          toast.success("Signup successful!");
+          router.push("pages/dashboard");
+        }, 2000);
+      console.log(response);
     } catch (error) {
-      // verifyEmailMutation.isError &&
-      //   toast.error(verifyEmailMutation.error.message);
+      useVerifyemailMutation.isError &&
+        setTimeout(() => {
+          toast.error(useVerifyemailMutation?.error?.message);
+        }, 2000);
     }
   };
   useEffect(() => {
@@ -49,7 +57,6 @@ const EmailVerificationPage = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="bg-white p-4"
       >
-        {" "}
         <h1>VERIFY EMAIL ADDRESS</h1>
         <div className="my-3">
           <Controller

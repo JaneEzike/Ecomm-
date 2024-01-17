@@ -1,13 +1,17 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useForm, Controller } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
-// import { useLogin } from "@/services/api/auth/authApi";
+import { loginUserFn } from "@/services/api/auth/authApi";
 import { CustomInput } from "@/components/CustomInput";
 import Button from "@/components/buttons";
+import { ILoginResponse, IUser } from "@/app/types/general";
 const Login = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -20,24 +24,26 @@ const Login = () => {
       password: "",
     },
   });
-  // const useLoginMutation = useLogin();
-  const onSubmit = async (credentials: any) => {
+  const useLoginMutation = useMutation({
+    mutationFn: (userData: ILoginResponse) => loginUserFn(userData),
+  });
+
+  const onSubmit = async (values: any) => {
     try {
-      // const data = await useLoginMutation.mutateAsync(credentials);
-      // useLoginMutation.isSuccess && toast.success("login successful!");
-      // // console.log(res);
-      // if (res.ok) {
-      //   // Set token to cookie
-      //   const token = res?.data?.access;
-      //   Cookies.set("token", token, { expires: 7, secure: true });
-      //   setAuthToken(token);
-      // }
+      const response = await useLoginMutation.mutateAsync(values);
+      useLoginMutation.isSuccess &&
+        setTimeout(() => {
+          toast.success("Signup successful!");
+          router.push("pages/dashboard");
+        }, 2000);
+      console.log(response);
     } catch (error) {
-      // // Handle login error
-      // useLoginMutation.isError && toast.error(useLoginMutation.error.message);
+      useLoginMutation.isError &&
+        setTimeout(() => {
+          toast.error(useLoginMutation.error.message);
+        }, 2000);
     }
   };
-
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset();

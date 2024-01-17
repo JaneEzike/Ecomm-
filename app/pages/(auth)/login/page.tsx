@@ -45,9 +45,12 @@ const Login = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSubmitSuccessful]);
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-[40%] mx-auto">
-        <div className="mb-3">
+    <div className="w-screen h-screen bg-blue-400 flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="min-h-[300px] w-[400px] bg-white flex items-center flex-col justify-center gap-3 p-4 "
+      >
+        <div className="mb-3 w-[100%]">
           <Controller
             control={control}
             name="email"
@@ -77,7 +80,7 @@ const Login = () => {
           />
           {errors.email && <p>{errors?.email?.message}</p>}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 w-[100%]">
           <Controller
             control={control}
             rules={{
@@ -123,7 +126,7 @@ const Login = () => {
           loading={false}
         />
       </form>
-    </>
+    </div>
   );
 };
 

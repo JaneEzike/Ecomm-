@@ -37,9 +37,12 @@ const SignUp = () => {
     }
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="w-[40%] mx-auto">
-        <div className="mb-2">
+    <div className="w-screen h-screen bg-blue-400 flex items-center justify-center  ">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="min-h-[300px] w-[400px] bg-white flex items-center flex-col justify-center gap-3 p-4 "
+      >
+        <div className="mb-2  w-[100%]">
           <Controller
             control={control}
             rules={{
@@ -52,7 +55,7 @@ const SignUp = () => {
             render={({ field: { onChange, onBlur, value }, formState }) => (
               <CustomInput
                 size="sm"
-                fullWidth
+                fullWidth={true}
                 value={value}
                 type="text"
                 LabelText="Name"
@@ -65,7 +68,7 @@ const SignUp = () => {
           />
           <p style={{ color: "red" }}>{errors.fname && errors.fname.message}</p>
         </div>
-        <div className="mb-2">
+        <div className="mb-2 w-[100%]">
           <Controller
             control={control}
             rules={{
@@ -102,7 +105,7 @@ const SignUp = () => {
             {errors.password && errors.password.message}
           </p>
         </div>
-        <div className="mb-2">
+        <div className="mb-2 w-[100%]">
           <Controller
             control={control}
             name="email"

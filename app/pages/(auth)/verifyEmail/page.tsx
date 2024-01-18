@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useVerifyEmail } from "@/services/api/auth/authApi";
 import { CustomInput } from "@/components/CustomInput";
 import Button from "@/components/buttons";
-import { token } from "@/utils/token";
+import { token } from "@/utils/securityUtils";
 
 const EmailVerificationPage = () => {
   const router = useRouter();

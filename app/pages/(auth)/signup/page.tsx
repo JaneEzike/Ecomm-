@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/buttons";
 import { CustomInput } from "@/components/CustomInput";
 import { useSignUp } from "@/services/api/auth/authApi";
+import CountrySelector from "@/components/selectCountryInput/inedex";
+import { SelectPhone } from "@/components/SelectPhone";
+import RadioInput from "@/components/radioInput";
 
 interface FormData {
   fname: string;
@@ -40,8 +43,6 @@ const SignUp = () => {
           toast.success("Signup successful!");
           router.push("pages/authMessage");
         }, 2000);
-
-      console.log(response);
     } catch (error) {
       useSignUpMutation.isError &&
         setTimeout(() => {
@@ -159,7 +160,17 @@ const SignUp = () => {
             <p style={{ color: "red" }}>{errors.email.message}</p>
           )}
         </div>
-
+        <div className="mb-2 w-[100%]">
+          <CountrySelector />
+        </div>{" "}
+        <div className="mb-2 w-[100%]">
+          <SelectPhone />
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <RadioInput name="gender" value={"male"} text="male" />
+          <RadioInput name="gender" value={"female"} text="female" />
+          <RadioInput name="gender" value={"other"} text="other" />
+        </div>
         <Button
           size="md"
           variant="primary"

@@ -1,5 +1,6 @@
 import { authApi } from "../api";
 import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 import {
   GenericResponse,
   ILoginResponse,
@@ -7,8 +8,13 @@ import {
   IUserResponse,
 } from "@/app/types/general";
 
+let token = Cookies.get("token");
 export const signUpUserFn = async (user: IUser) => {
-  const response = await authApi.post("/auth/v1/admin/sign-up", user);
+  const response = await authApi.post("/auth/v1/admin/sign-up", user, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
   return response.data;
 };
 

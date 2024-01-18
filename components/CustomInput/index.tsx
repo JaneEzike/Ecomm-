@@ -25,7 +25,7 @@ const InputVariants = cva(
     compoundVariants: [
       {
         size: "sm",
-        className: "uppercase rounded-md",
+        className: "rounded-md",
       },
     ],
     defaultVariants: {

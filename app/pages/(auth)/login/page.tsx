@@ -12,6 +12,7 @@ import Button from "@/components/buttons";
 import { useLogin } from "@/services/api/auth/authApi";
 import { ILoginResponse, IUser } from "@/app/types/general";
 import { setCookie } from "cookies-next";
+import { setToken } from "@/utils/securityUtils";
 const Login = () => {
   const router = useRouter();
   const {
@@ -31,11 +32,8 @@ const Login = () => {
   const onSubmit = async (values: any) => {
     try {
       const res = await useLoginMutation.mutateAsync(values);
-      if (res.ok) {
-        // Set token to cookie
-        const token = res?.data?.access;
-        Cookies.set("token", token, { expires: 7, secure: true });
-      }
+      const token = res.access
+      setToken(token)
       useLoginMutation.isSuccess &&
         setTimeout(() => {
           toast.success("Signup successful!");

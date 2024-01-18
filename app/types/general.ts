@@ -8,6 +8,8 @@ export interface IInput {
   onBlur: any;
   onChange: any;
   value: any;
+  onClick?: any;
+  showPassword?: boolean;
   type: "number" | "text" | "password" | "email";
 }
 

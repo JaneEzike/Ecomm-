@@ -33,8 +33,8 @@ export const logoutUserFn = async () => {
 // };
 
 // // Export your authentication functions
-// export const useLogin = () => useMutation(loginUserFn);
-// export const useSignUp = () => useMutation(signUpUserFn);
+export const useLogin = () => useMutation({ mutationFn: loginUserFn });
+export const useSignUp = () => useMutation({ mutationFn: signUpUserFn });
 // export const useLogout = () => useMutation(logoutUserFn);
-// export const useVerifyEmail = () => useMutation(verifyEmailFn);
+export const useVerifyEmail = () => useMutation({ mutationFn: verifyEmailFn });
 // export const useGetUser = () => useMutation(getMeFn);

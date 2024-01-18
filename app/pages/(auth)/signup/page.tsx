@@ -1,13 +1,13 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import Button from "@/components/buttons";
 import { CustomInput } from "@/components/CustomInput";
-
-import { signUpUserFn } from "@/services/api/auth/authApi";
-import { IUser } from "@/app/types/general";
+import { useSignUp } from "@/services/api/auth/authApi";
 
 interface FormData {
   fname: string;
@@ -15,11 +15,14 @@ interface FormData {
   email: string;
 }
 const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitSuccessful },
   } = useForm<FormData>({
     defaultValues: {
       fname: "",
@@ -27,9 +30,7 @@ const SignUp = () => {
       email: "",
     },
   });
-  const useSignUpMutation = useMutation({
-    mutationFn: (userData: IUser) => signUpUserFn(userData),
-  });
+  const useSignUpMutation = useSignUp();
 
   const onSubmit = async (values: any) => {
     try {
@@ -39,6 +40,7 @@ const SignUp = () => {
           toast.success("Signup successful!");
           router.push("pages/authMessage");
         }, 2000);
+
       console.log(response);
     } catch (error) {
       useSignUpMutation.isError &&
@@ -47,7 +49,12 @@ const SignUp = () => {
         }, 2000);
     }
   };
-
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSubmitSuccessful]);
   return (
     <div className="w-screen h-screen bg-blue-400 flex items-center justify-center  ">
       <ToastContainer />
@@ -106,11 +113,13 @@ const SignUp = () => {
                 fullWidth
                 LabelText="Password"
                 isPassword
+                onClick={() => setShowPassword(!showPassword)}
+                showPassword={showPassword}
                 value={value}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 variant="outlined"
-                onBlur={onBlur} // notify when input is touched
-                onChange={onChange} // send value to hook form
+                onBlur={onBlur}
+                onChange={onChange}
               />
             )}
           />

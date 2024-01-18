@@ -4,9 +4,10 @@ import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { verifyEmailFn } from "@/services/api/auth/authApi";
+import { useVerifyEmail } from "@/services/api/auth/authApi";
 import { CustomInput } from "@/components/CustomInput";
 import Button from "@/components/buttons";
+import { token } from "@/utils/token";
 
 const EmailVerificationPage = () => {
   const router = useRouter();
@@ -22,19 +23,15 @@ const EmailVerificationPage = () => {
     },
   });
 
-  const useVerifyemailMutation = useMutation({
-    mutationFn: (userData: any) => verifyEmailFn(userData),
-  });
+  const useVerifyemailMutation = useVerifyEmail();
 
   const onSubmit = async (values: any) => {
     try {
       const response = await useVerifyemailMutation.mutateAsync(values);
       useVerifyemailMutation.isSuccess &&
         setTimeout(() => {
-          toast.success("Signup successful!");
-          router.push("pages/dashboard");
+          toast.success("email verified succesfully");
         }, 2000);
-      console.log(response);
     } catch (error) {
       useVerifyemailMutation.isError &&
         setTimeout(() => {

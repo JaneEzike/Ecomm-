@@ -9,7 +9,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { loginUserFn } from "@/services/api/auth/authApi";
 import { CustomInput } from "@/components/CustomInput";
 import Button from "@/components/buttons";
+import { useLogin } from "@/services/api/auth/authApi";
 import { ILoginResponse, IUser } from "@/app/types/general";
+import { setCookie } from "cookies-next";
 const Login = () => {
   const router = useRouter();
   const {
@@ -24,19 +26,21 @@ const Login = () => {
       password: "",
     },
   });
-  const useLoginMutation = useMutation({
-    mutationFn: (userData: ILoginResponse) => loginUserFn(userData),
-  });
+  const useLoginMutation = useLogin();
 
   const onSubmit = async (values: any) => {
     try {
-      const response = await useLoginMutation.mutateAsync(values);
+      const res = await useLoginMutation.mutateAsync(values);
+      if (res.ok) {
+        // Set token to cookie
+        const token = res?.data?.access;
+        Cookies.set("token", token, { expires: 7, secure: true });
+      }
       useLoginMutation.isSuccess &&
         setTimeout(() => {
           toast.success("Signup successful!");
           router.push("pages/dashboard");
         }, 2000);
-      console.log(response);
     } catch (error) {
       useLoginMutation.isError &&
         setTimeout(() => {
@@ -112,7 +116,7 @@ const Login = () => {
                 LabelText="Password"
                 isPassword
                 value={value}
-                type="password"
+                type="text"
                 variant="outlined"
                 onBlur={onBlur} // notify when input is touched
                 onChange={onChange} // send value to hook form

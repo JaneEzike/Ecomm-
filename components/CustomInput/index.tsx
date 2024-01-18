@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 import { cn } from "@/utils/helper";
-import { EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import { IInput } from "@/app/types/general";
 
 const InputVariants = cva(
@@ -44,6 +44,8 @@ export const CustomInput = ({
   isPassword,
   variant,
   onBlur,
+  showPassword,
+  onClick,
   type,
   onChange,
   value,
@@ -54,8 +56,11 @@ export const CustomInput = ({
       <label htmlFor="">{LabelText}</label>
       <div className="relative">
         {isPassword && (
-          <div className="absolute right-2 top-2">
-            <EyeOutlined />
+          <div
+            className="absolute right-2 top-2 cursor-pointer"
+            onClick={onClick}
+          >
+            {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
           </div>
         )}
         <input
